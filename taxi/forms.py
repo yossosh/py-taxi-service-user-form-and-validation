@@ -23,11 +23,16 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         fields = ["license_number"]
 
     def clean_license_number(self):
+        """
+        Validates the license number format.
+
+        The license number must consist of 3 uppercase letters followed by 5 digits.
+
+        Raises:
+            forms.ValidationError: If the license number does not match the required format.
+        """
         license_number = self.cleaned_data["license_number"]
         if not re.match(r"^[A-Z]{3}\d{5}$", license_number):
             raise forms.ValidationError(
-                "License number must consist of 3 uppercase"
-                " letters followed by 5 digits."
+                "License number must consist of 3 uppercase letters followed by 5 digits."
             )
-
-        return license_number

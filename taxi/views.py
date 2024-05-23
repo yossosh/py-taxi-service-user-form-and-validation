@@ -114,12 +114,10 @@ class ManageMyCarView(LoginRequiredMixin, generic.View):
     def post(self, request, *args, **kwargs):
         car = get_object_or_404(Car, pk=self.kwargs["pk"])
         user = request.user
-        if "assign" in request.POST:
-            if user not in car.drivers.all():
-                car.drivers.add(user)
-        elif "remove" in request.POST:
-            if user in car.drivers.all():
-                car.drivers.remove(user)
+        if "assign" in request.POST and user not in car.drivers.all():
+            car.drivers.add(user)
+        elif "remove" in request.POST and user in car.drivers.all():
+            car.drivers.remove(user)
         return HttpResponseRedirect(
             reverse("taxi:car-detail", kwargs={"pk": car.pk})
         )
